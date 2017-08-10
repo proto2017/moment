@@ -20,8 +20,7 @@ class Fuse {
             color: brightColor(),
             tx: target.x,
             ty: target.y,
-            sx: canvas.width/2,
-            sy: canvas.height / 2
+            speed: random(50, 150)
         });
         this.parabolas.push(parabola);
         console.log(this.parabolas);
@@ -31,8 +30,7 @@ class Fuse {
         const { parabolas } = this;
         for (let i = parabolas.length - 1; i >= 0; i--) {
             let parabola = parabolas[i];
-            parabola.move();
-            parabola.draw();
+            parabola.start();
             this._remove(parabola, i);
         }
     }

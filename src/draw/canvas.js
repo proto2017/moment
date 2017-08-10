@@ -18,9 +18,30 @@ class Canvas {
         this.context = this.canvas.getContext('2d');
         this.context.globalAlpha = 0.85;
         this.createOffScreenCanvas();
-       
+      //  this.test();
     }
 
+    test() {
+        const {context} = this;
+        context.save();
+        context.beginPath();
+        context.translate(10, 10);
+        context.arc(100, 100, 20, 0, Math.PI * 2, false);
+        context.fillStyle='red';
+        context.fill();
+        context.closePath();
+        context.restore();
+
+        context.save();
+        context.beginPath();
+        context.translate(10, 10);
+        context.scale(1.5, 1.5);
+        context.arc(100, 100, 20, 0, Math.PI * 2, false);
+        context.fillStyle='yellow';
+        context.fill();
+        context.closePath();
+        context.restore();
+    }
 
     createOffScreenCanvas() {
         this.offscreenCanvas = document.createElement("canvas");
