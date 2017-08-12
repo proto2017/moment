@@ -1,56 +1,54 @@
 import { CLIENT_HEIGHT, CLIENT_WIDTH } from '../units/global';
-import { getCanvasMousePosition } from '../units';
+import { getCanvasMousePosition, upperFirstCase } from '../units';
 class Canvas {
-    context = null
-    canvas = null
     mousePosition = { x: 0, y: 0 }
     constructor() {
-        this.canvas = document.createElement("canvas");
-        this.canvas.width = CLIENT_WIDTH * 2;
-        this.canvas.height = CLIENT_HEIGHT * 2;
-        this.canvas.style.width = CLIENT_WIDTH + "px";
-        this.canvas.style.height = CLIENT_HEIGHT + "px";
-        this.canvas.style.position = "absolute";
-        this.canvas.style.zIndex = 9999;
-        this.canvas.style.top = 0;
-        this.canvas.style.left = 0;
-        document.body.appendChild(this.canvas);
-        this.context = this.canvas.getContext('2d');
-        this.context.globalAlpha = 0.85;
-        this.createOffScreenCanvas();
-      //  this.test();
+
+        this._create({
+            name: 'canvas',
+            context: 'context',
+            id: '#firework',
+            globalAlpha: 0.85
+        });
     }
 
-    test() {
-        const {context} = this;
-        context.save();
-        context.beginPath();
-        context.translate(10, 10);
-        context.arc(100, 100, 20, 0, Math.PI * 2, false);
-        context.fillStyle='red';
-        context.fill();
-        context.closePath();
-        context.restore();
+    _create({ name, context, id, globalAlpha }) {
+        this._main({ name, context, id, globalAlpha });
 
-        context.save();
-        context.beginPath();
-        context.translate(10, 10);
-        context.scale(1.5, 1.5);
-        context.arc(100, 100, 20, 0, Math.PI * 2, false);
-        context.fillStyle='yellow';
-        context.fill();
-        context.closePath();
-        context.restore();
+        this._offScreen({ name, context, context });
     }
 
-    createOffScreenCanvas() {
-        this.offscreenCanvas = document.createElement("canvas");
-        this.offscreenContext = this.offscreenCanvas.getContext("2d");
-        this.offscreenCanvas.width = CLIENT_WIDTH * 2;
-        this.offscreenCanvas.height = CLIENT_HEIGHT * 2;
-        this.offscreenCanvas.style.width = CLIENT_WIDTH + "px";
-        this.offscreenCanvas.style.height = CLIENT_HEIGHT + "px";
+    _main({ name, context, id, globalAlpha }) {
+
+        this[name] = document.querySelector(id);
+        this[context] = this[name].getContext('2d');
+
+        this._setStyle(name);
+
+        // 这个变量一定要在高宽设置好之后才能生效
+        this[context].globalAlpha = 0.85;
     }
+
+    _offScreen({ name, context }) {
+
+        const canvasName = "offscreen" + upperFirstCase(name),
+            contextName = "offscreen" + upperFirstCase(context);
+
+        this[canvasName] = document.createElement("canvas");
+        this[contextName] = this[canvasName].getContext("2d");
+
+        this._setStyle(canvasName);
+    }
+
+    _setStyle(canvasName) {
+
+        this[canvasName].width = CLIENT_WIDTH * 2;
+        this[canvasName].height = CLIENT_HEIGHT * 2;
+
+        this[canvasName].style.width = CLIENT_WIDTH + "px";
+        this[canvasName].style.height = CLIENT_HEIGHT + "px";
+    }
+
 
     getMousePosition(cb) {
         const { canvas } = this;
@@ -63,8 +61,42 @@ class Canvas {
         }, false);
     }
 
-    auxiliary() {
-        
+
+
+    strokeArc({
+        color, tx, ty, radius
+    }) {
+        context.save();
+        context.beginPath();
+        context.lineWidth = 2;
+        context.translate(tx, ty);
+        context.arc(0, 0, radius, 0, Math.PI * 2, false);
+        context.strokeStyle = color;
+        context.stroke();
+        context.closePath();
+        context.restore();
+    }
+
+    fillArc({
+        sx, sy, mx, my, radius, color
+    }) {
+        context.save();
+        context.beginPath();
+        context.translate(sx, sy);
+        context.arc(mx, my, radius, 0, Math.PI * 2, false);
+        context.fillStyle = color;
+        context.fill();
+        context.closePath();
+        context.restore();
+    }
+
+    drawMainFromOffScreen(cb) {
+        const { offscreenContext, context, canvas } = this;
+        offscreenContext.globalCompositeOperation = "copy";
+        offscreenContext.drawImage(canvas, 0, 0, canvas.width, canvas.height);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        cb && cb();
+        context.drawImage(offscreenCanvas, 0, 0, canvas.width, canvas.height);
     }
 
     clear() {

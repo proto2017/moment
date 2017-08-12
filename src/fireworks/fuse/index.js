@@ -20,7 +20,8 @@ class Fuse {
             color: brightColor(),
             tx: target.x,
             ty: target.y,
-            speed: random(50, 150)
+            speed: random(50, 150),
+            sx: canvas.width / 2
         });
         this.parabolas.push(parabola);
         console.log(this.parabolas);
@@ -41,11 +42,9 @@ class Fuse {
     }
 
     draw() {
-        offscreenContext.globalCompositeOperation = "copy";
-        offscreenContext.drawImage(canvas, 0, 0, canvas.width, canvas.height);
-        Canvas.clear();
-        this._move();
-        context.drawImage(offscreenCanvas, 0, 0, canvas.width, canvas.height);
+        Canvas.drawMainFromOffScreen(() => {
+            this._move();
+        })
     }
 
 }

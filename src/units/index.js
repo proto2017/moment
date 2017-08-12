@@ -15,3 +15,7 @@ export function random(min, max) {
 export function brightColor() {
     return `rgb(${parseInt(random(0, 255))}, ${parseInt(random(0, 255))}, ${parseInt(random(0, 255))})`;
 }
+
+export function upperFirstCase(str) {
+    return str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase());
+}

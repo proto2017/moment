@@ -3,34 +3,11 @@ import Canvas, { canvas, context } from '../draw/canvas';
 import Fuse from './fuse';
 class Index {
     fireWorks = [{
-        gravity: 0.98,
-        friction: 0.98,
-        color: "red",
-        fuse: {
-            startPoint: [10, canvas.height - 20],
-            vx: 0.12,
-            vy: -0.12,
-            x: 20,
-            y: canvas.height - 20,
-            ex: 200,
-            ey: 200
-        },
-        scene: {
-            startPoint: [100, 100],
-            data: [
-                {
-                    vx: 0.12,
-                    vy: -0.12,
-                    radius: 5,
-                }
-            ]
-        },
         status: 0
     }]
     currentTime = new Date()
     timeSlice = 1000 / 60
     accumulation = 0
-    sx = 0
     constructor() {
         this.start = this.start.bind(this);
     }
