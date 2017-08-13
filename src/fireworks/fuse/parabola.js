@@ -17,8 +17,9 @@ class Parabola {
     scaleX = 1
     scaleY = 1
     scaleSpeed = 0.5
-
+    status = 0
     auxiliaryRadius = 0
+    running = false
     constructor(o) {
         Object.assign(this, o);
         this._setEndPosition();
@@ -33,12 +34,11 @@ class Parabola {
         this.b = (this.ey - this.a * this.ex * this.ex) / this.ex;
     }
     _setDirection() {
-         this.direction = this.ex > 0 ? 1 : -1;
+        this.direction = this.ex > 0 ? 1 : -1;
     }
 
     _move() {
         this._setMovePosition();
-       // this._setScale();
         this._moveEnd();
     }
     _setMovePosition() {
@@ -50,32 +50,32 @@ class Parabola {
         this.radius += this.scaleSpeed;
         if (this.radius > 30) {
             this.radius = 0;
-        } 
+        }
     }
     _moveEnd() {
         if (Math.abs(this.mx) > Math.abs(this.ex)) {
             this._setEndStatus();
-        } 
+        }
     }
     _setEndStatus() {
         this.status = -1;
     }
 
     _draw() {
-        const {sx, sy, mx, my, radius, color} = this;
+        const { sx, sy, mx, my, radius, color } = this;
         Canvas.fillArc({
             sx, sy, mx, my, radius, color
         })
     }
 
     _auxiliary() {
-        const {tx, ty, color} = this;
+        const { tx, ty, color } = this;
         this.auxiliaryRadius++;
         if (this.auxiliaryRadius > 30) {
             this.auxiliaryRadius = 0;
         }
         Canvas.strokeArc({
-            tx, ty,color, radius: this.auxiliaryRadius
+            tx, ty, color, radius: this.auxiliaryRadius
         });
     }
 

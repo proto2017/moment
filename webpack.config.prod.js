@@ -9,7 +9,7 @@ module.exports = {
     output: {
         path: path.join(__dirname, 'dist'),
         filename: 'js/bundle.js?v=' + Math.random(),
-        publicPath: 'http://s.wx.tarh5.cn/darksear/' // http://s.wx.tarh5.cn/darksear/
+        publicPath: './' // http://s.wx.tarh5.cn/darksear/
     },
     resolve: {
         extensions: ['', '.js']

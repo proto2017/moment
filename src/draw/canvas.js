@@ -3,12 +3,11 @@ import { getCanvasMousePosition, upperFirstCase } from '../units';
 class Canvas {
     mousePosition = { x: 0, y: 0 }
     constructor() {
-
         this._create({
             name: 'canvas',
             context: 'context',
             id: '#firework',
-            globalAlpha: 0.85
+            globalAlpha: 0.95
         });
     }
 
