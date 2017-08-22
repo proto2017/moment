@@ -4,6 +4,41 @@
 
 # 提交记录
 
+## 2017-08-22 23:19
+
+最近有点忙了，加上一直没好的实现方法了，导致整个项目属于停滞的状态了。这几天也看了下简单工厂模式，感觉可以应用到这个项目上来，晚上突然灵机一动，修改了点代码，使各个功能的代码能自己管理自己，移动，删除的动作都有自己独立完成了
+
+```javascript
+this.fireWorks.push({
+    status: 0,
+    fuses: new Fuse({
+        target,
+        color
+    }),
+    explodes: new Explode({
+        target,
+        color
+    })
+})
+```
+
+增加引信和爆炸的方法现在改成了直接push这两个类了，每个类独立管理自己的状态
+
+```javascript
+for (let i = 0, len = fireWorks.length; i < len; i++) {
+    let fireWork = fireWorks[i],
+        status = fireWork.status;
+        if (status == 0) {
+            fireWork.fuses.start();
+        } else {
+            fireWork.explodes.start();
+        } 
+}
+```
+
+绘制的代码也更加清晰，这样改后扩展性强很多了
+
+
 ## 2017-08-12 21:59
 
 这两天实现了爆炸的效果，但是代码被改的不成样了。以前引信和爆炸的逻辑是分开的，现在要把这两者结合的话，以前的结构有点问题，引信和爆炸必须一次次处理了，以前是全部处理了，这部分逻辑应该放到烟花总入口里面去处理。现在的效果还是比较炫的，哈哈。下期整理代码结构了，并且加点概念进去
