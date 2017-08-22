@@ -3,42 +3,32 @@ import Parabola from './parabola';
 import { random, brightColor } from '../../units';
 class Fuse {
 
-    constructor() {
+    constructor(o) {
+        Object.assign(this, o);
+        this.addParabola();
     }
 
-    addParabola(target) {
-        let parabola = new Parabola({
+    addParabola() {
+        const {target, color} = this;
+        this.parabola = new Parabola({
             a: random(0.005, 0.009),
-            color: brightColor(),
+            color,
             tx: target.x,
             ty: target.y,
-            speed: random(50, 150),
+            speed: random(100, 250),
             sx: canvas.width / 2
         });
-        return parabola;
     }
 
-    _move(fireWork) {
-        const { parabolas } = this;
-        for (let i = parabolas.length - 1; i >= 0; i--) {
-            let parabola = parabolas[i];
-            parabola.start();
-            this._remove(parabola, i, fireWork);
-        }
+    _move() {
+        const { parabola } = this;
+        parabola.start();
     }
 
-    _remove(parabola, i, fireWork) {
-        if (parabola.status != -1) return false;
-        this.parabolas.splice(i, 1);
-        fireWork.status = 1;
-    }
-
-    _draw(fireWork) {
-        Canvas.drawMainFromOffScreen(() => {
-            this._move(fireWork);
-        })
+    start() {
+        this._move();
     }
 
 }
 
-export default new Fuse();
+export default Fuse;

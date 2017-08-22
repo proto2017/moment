@@ -2,6 +2,7 @@
 import Canvas, { canvas, context } from '../draw/canvas';
 import Fuse from './fuse';
 import Explode from './explode';
+import { random, brightColor } from '../units';
 class Index {
     fireWorks = []
     currentTime = new Date()
@@ -14,11 +15,20 @@ class Index {
 
     add() {
         Canvas.getMousePosition((target) => {
+            let color = brightColor();
             this.fireWorks.push({
                 status: 0,
-                fuses: Fuse.addParabola(target),
-                explodes: Explode.addBalls(target)
+                fuses: new Fuse({
+                    target,
+                    color
+                }),
+                explodes: new Explode({
+                    target,
+                    color
+                })
             })
+
+            console.log(this.fireWorks)
         })
     }
 
@@ -32,14 +42,12 @@ class Index {
             for (let i = 0, len = fireWorks.length; i < len; i++) {
                 let fireWork = fireWorks[i],
                     status = fireWork.status;
-               
                     if (status == 0) {
                         fireWork.fuses.start();
                     } else {
-                        Explode.start(fireWork.explodes);
+                        fireWork.explodes.start();
                     } 
             }
-
             this._remove();
             this.accumulation -= passed;
         }
@@ -50,28 +58,15 @@ class Index {
         let { fireWorks } = this;
         for (let i = fireWorks.length - 1; i >= 0; i--) {
             let fireWork = fireWorks[i];
-            if (fireWork.fuses.status == -1) {
+            if (fireWork.fuses.parabola.status == -1) {
                 fireWork.status = 1;
             } 
-            if (fireWork.status == 1 && fireWork.explodes.length < 1) {
+            if (fireWork.status == 1 && fireWork.explodes.balls.length < 1) {
                 this.fireWorks.splice(i, 1);
             }
         }
     }
 
-
-
-    // 绘制引信
-    _drawFuse() {
-        Canvas.drawMainFromOffScreen(() => {
-            Fuse.draw();
-        })
-
-    }
-    // 绘制景色
-    _drawScene() {
-        Explode.start();
-    }
     start() {
         Canvas.drawMainFromOffScreen(() => {
             this._move();

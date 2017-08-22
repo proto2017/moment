@@ -8,8 +8,8 @@ class Ball {
     radius = 10
     color = brightColor()
     vx = random(-10, 10)
-    vy = random(-20, -10)
-    gravity = 0.95
+    vy = random(-15, -5)
+    gravity = 0.5
     constructor(o) {
         Object.assign(this, o);
     }

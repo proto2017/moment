@@ -7,7 +7,7 @@ class Parabola {
     ey = 0
     a = 0.01
     b = 0
-    speed = 50
+    speed = 200
     radius = 20
     color = 'red'
     pause = true
