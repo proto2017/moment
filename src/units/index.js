@@ -19,3 +19,8 @@ export function brightColor() {
 export function upperFirstCase(str) {
     return str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase());
 }
+
+export const isEmpty = function (str) {
+    if (!str || str === "undefined" || JSON.stringify(str) == '{}') return true;
+    return false;
+}
